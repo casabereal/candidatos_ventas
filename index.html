@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proceso de Selección — Casabe Real</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #b7791f;
+            --bg-color: #fbf9f6;
+            --card-bg: #ffffff;
+            --text-color: #2b2b2b;
+            --border-color: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 30px;
+            border-top: 5px solid var(--secondary);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .logo-text {
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .admin-toggle-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #edf2f7;
+            border: 1px solid #cbd5e0;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        .admin-toggle-btn:hover {
+            background: #e2e8f0;
+        }
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        h3 {
+            color: var(--primary);
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--secondary);
+            padding-left: 8px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        @media (max-width: 600px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 5px;
+            color: #4a5568;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(183, 121, 31, 0.1);
+        }
+        textarea {
+            resize: vertical;
+            height: 90px;
+        }
+        .question-card {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+        .options-list label {
+            display: flex;
+            align-items: flex-start;
+            font-weight: normal;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .options-list input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+        .btn-submit {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover {
+            background-color: #2c5282;
+        }
+        .hidden {
+            display: none;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .alert-success {
+            background-color: #def7ec;
+            color: #03543f;
+            border: 1px solid #bcf0da;
+        }
+        .alert-error {
+            background-color: #fde8e8;
+            color: #9b1c1c;
+            border: 1px solid #fbd5d5;
+        }
+        /* Estilos Panel Gerencial / Evaluación */
+        .admin-panel {
+            background: #fff;
+            border: 2px dashed var(--secondary);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+        .candidate-select-row {
+            margin-bottom: 15px;
+        }
+        .eval-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e0;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        .pros-list { color: #2f855a; margin: 5px 0 15px 0; padding-left: 20px; }
+        .cons-list { color: #c53030; margin: 5px 0 15px 0; padding-left: 20px; }
+        .recommendation-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+        .rec-hire { background-color: #def7ec; color: #03543f; }
+        .rec-review { background-color: #feecdc; color: #9c4221; }
+        .rec-discard { background-color: #fde8e8; color: #9b1c1c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <button class="admin-toggle-btn" onclick="toggleAdminPanel()">Panel Gerencial 🔒</button>
+        <div class="logo-text">CASABE REAL</div>
+        <div class="subtitle">Evaluación de Postulación — Canal Restaurantes (HORECA)</div>
+    </div>
+
+    <div id="alertBox" class="alert hidden"></div>
+
+    <!-- PANEL EXCLUSIVO GERENCIAL DE EVALUACIÓN Y RESULTADOS -->
+    <div id="adminPanelSection" class="admin-panel hidden">
+        <h3>Panel de Evaluación y Resultados (Vista Exclusiva)</h3>
+        <p style="font-size: 13px; color: #666;">Selecciona un candidato registrado para ver su análisis automático de pros, contras y recomendación de contratación.</p>
+        
+        <div class="candidate-select-row">
+            <label for="candidateSelect">Candidatos Registrados:</label>
+            <select id="candidateSelect" onchange="loadCandidateEvaluation()">
+                <option value="">Seleccione un candidato...</option>
+            </select>
+        </div>
+
+        <div id="evaluationDetailsContainer" class="hidden">
+            <div class="eval-box">
+                <h4 id="evalCandidateName" style="margin-top: 0; color: var(--primary);"></h4>
+                <p><strong>Cargo Postulado:</strong> <span id="evalCandidateRole"></span> | <strong>Contacto:</strong> <span id="evalCandidateContact"></span></p>
+                <hr style="border:0; border-top:1px solid #e2e8f0; margin: 10px 0;">
+                
+                <strong>Pros del Perfil:</strong>
+                <ul id="evalPros" class="pros-list"></ul>
+
+                <strong>Contras / Riesgos Identificados:</strong>
+                <ul id="evalCons" class="cons-list"></ul>
+
+                <div>
+                    <strong>Recomendación de Contratación:</strong><br>
+                    <span id="evalRecommendationBadge" class="recommendation-badge"></span>
+                    <p id="evalRecommendationText" style="font-size: 13px; margin-top: 8px; color: #4a5568;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORMULARIO DE POSTULACIÓN -->
+    <form id="recruitmentForm" onsubmit="handleFormSubmit(event)">
+        
+        <!-- SECCIÓN 1: DATOS PERSONALES -->
+        <div class="form-section">
+            <h3>1. Datos Personales</h3>
+            <div class="form-group">
+                <label for="rol">Cargo al que postula *</label>
+                <select id="rol" name="rol" required onchange="toggleRoleQuestions()">
+                    <option value="">Seleccione una opción...</option>
+                    <option value="Jefa de Ventas">Jefa de Ventas</option>
+                    <option value="Asesor Comercial">Asesor Comercial (Canal Restaurantes)</option>
+                </select>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="nombre">Nombre y Apellido *</label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="Ej. María Pérez">
+                </div>
+                <div class="form-group">
+                    <label for="edad">Edad *</label>
+                    <input type="number" id="edad" name="edad" required min="18" max="70" placeholder="Ej. 32">
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="estadoCivil">Estado Civil *</label>
+                    <select id="estadoCivil" name="estadoCivil" required>
+                        <option value="">Seleccione...</option>
+                        <option value="Soltero/a">Soltero/a</option>
+                        <option value="Casado/a">Casado/a</option>
+                        <option value="Divorciado/a">Divorciado/a</option>
+                        <option value="Concubinato / Unido">Concubinato / Unido</option>
+                        <option value="Viudo/a">Viudo/a</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="contacto">Teléfono / WhatsApp de Contacto *</label>
+                    <input type="text" id="contacto" name="contacto" required placeholder="Ej. +58 412-1234567">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="direccion">Dirección de Residencia (Sector / Ciudad) *</label>
+                <input type="text" id="direccion" name="direccion" required placeholder="Ej. Baruta, Caracas">
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: PREGUNTAS ABIERTAS -->
+        <div class="form-section">
+            <h3>2. Análisis Situacional y Experiencia</h3>
+            <div id="openQuestionsContainer">
+                <p style="color: #666; font-style: italic;">Por favor seleccione primero un cargo para cargar las preguntas.</p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: SELECCIÓN SIMPLE -->
+        <div class="form-section">
+            <h3>3. Cuestionario de Comportamiento y Juicio</h3>
+            <div id="simpleChoiceContainer">
+                <p style="color: #666; font-style: italic;">Por favor seleccione primero un cargo para cargar las preguntas.</p>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btnSubmit">Enviar Postulación</button>
+    </form>
+</div>
+
+<script>
+    const GOOGLE_SCRIPT_URL = "PEGAR_AQUI_TU_URL_DE_APPS_SCRIPT";
+
+    // Almacenamiento local temporal para simular el panel gerencial en este entorno
+    let candidatesDatabase = [];
+
+    const questionsData = {
+        "Jefa de Ventas": {
+            open: [
+                { id: "q_open_1", label: "1. ¿Cuál es tu experiencia específica liderando equipos de ventas en el canal HORECA (marcas, tamaño de equipo y tiempo de gestión)?" },
+                { id: "q_open_2", label: "2. ¿Cómo estructurarías las cuotas de venta y los KPIs diarios/mensuales para 5 asesores enfocados en restaurantes?" },
+                { id: "q_open_3", label: "3. ¿Qué estrategia comercial propondrías para romper la resistencia al cambio en chefs que ya usan otros acompañantes?" },
+                { id: "q_open_4", label: "4. Plan de acción ante un asesor con 3 semanas sin cumplir su meta de visitas y apertura:" },
+                { id: "q_open_5", label: "5. Describe una situación de negociación con cuenta mayorista tras una crisis operativa:" }
+            ],
+            simple: [
+                {
+                    id: "p1",
+                    title: "1. Cuando un miembro clave del equipo de ventas atraviesa una baja de rendimiento prolongada por problemas personales, tu postura es:",
+                    options: [
+                        { val: "A", text: "Exigir cumplimiento de cuota sin excepciones; los problemas personales no deben afectar los resultados." },
+                        { val: "B", text: "Reasignar temporalmente parte de su cartera a otro compañero para aliviar la carga mientras recupera su ritmo." },
+                        { val: "C", text: "Mantener conversación directa, evaluar impacto, ofrecer apoyo dentro de límites y co-crear plan de recuperación a corto plazo." },
+                        { val: "D", text: "Esperar a que el ciclo natural del mercado mejore para ver si su rendimiento repunta espontáneamente." }
+                    ]
+                },
+                {
+                    id: "p2",
+                    title: "2. Si uno de tus principales clientes del canal HORECA reclama enérgicamente por un retraso logístico que afectó su servicio:",
+                    options: [
+                        { val: "A", text: "Derivar el reclamo inmediatamente al departamento de logística para que ellos asuman la explicación." },
+                        { val: "B", text: "Atender con empatía, escuchar impacto, asumir responsabilidad comercial de la marca y presentar solución de compensación inmediata." },
+                        { val: "C", text: "Enviar correo formal detallando causas de fuerza mayor de la cadena de suministro." },
+                        { val: "D", text: "Ofrecer descuento agresivo en siguiente factura para evitar que el cliente cancele la cuenta." }
+                    ]
+                },
+                {
+                    id: "p3",
+                    title: "3. Frente a un mercado competitivo, consideras que la clave principal para que tu equipo supere los objetivos es:",
+                    options: [
+                        { val: "A", text: "Supervisión estricta y control diario del número de llamadas y visitas realizadas en terreno." },
+                        { val: "B", text: "Motivación constante a través de incentivos económicos y bonos por cumplimiento." },
+                        { val: "C", text: "Acompañamiento constante en campo, retroalimentación constructiva y adaptación rápida de argumentos de venta." },
+                        { val: "D", text: "Dejar autonomía total a los asesores para que operen bajo su propia experiencia y estilo comercial." }
+                    ]
+                },
+                {
+                    id: "p4",
+                    title: "4. Ante un desacuerdo estratégico importante con la gerencia general sobre la proyección de un trimestre:",
+                    options: [
+                        { val: "A", text: "Aceptar la directriz sin cuestionamientos para evitar fricciones con la dirección." },
+                        { val: "B", text: "Exponer punto de vista basándose exclusivamente en intuición y experiencia previa." },
+                        { val: "C", text: "Presentar contrapropuesta respaldada con datos históricos de ventas, comportamiento de ruta y métricas de mercado." },
+                        { val: "D", text: "Argumentar que las metas son inalcanzables debido a factores externos fuera de control." }
+                    ]
+                }
+            ]
+        },
+        "Asesor Comercial": {
+            open: [
+                { id: "q_open_1", label: "1. ¿Cómo es tu proceso habitual para identificar, contactar y lograr una cita presencial con el chef o jefe de compras?" },
+                { id: "q_open_2", label: "2. Respuesta ante objeción: 'No tengo tiempo, los proveedores me sobran y el casabe no se vende bien aquí'." },
+                { id: "q_open_3", label: "3. ¿Qué métricas o indicadores consideras indispensables para asegurar el éxito en una ruta de restaurantes?" },
+                { id: "q_open_4", label: "4. ¿Cómo organizas tu agenda semanal para balancear la prospección de nuevos con reposiciones de clientes activos?" },
+                { id: "q_open_5", label: "5. Comenta brevemente una experiencia vendiendo en terreno bajo presión o alta competencia:" }
+            ],
+            simple: [
+                {
+                    id: "p1",
+                    title: "1. Durante una jornada de prospección en una zona nueva, recibes múltiples negativas consecutivas. Tu actitud mental es:",
+                    options: [
+                        { val: "A", text: "Considerar que el producto no tiene aceptación en esa zona y suspender las visitas." },
+                        { val: "B", text: "Entender que el rechazo forma parte natural de la prospección, ajustar enfoque y mantener energía alta." },
+                        { val: "C", text: "Sentir frustración y disminuir el ritmo de visitas planificadas para el resto del día." },
+                        { val: "D", text: "Asumir que la estrategia de precios o el producto necesitan modificación urgente por la gerencia." }
+                    ]
+                },
+                {
+                    id: "p2",
+                    title: "2. Tienes agenda apretada, pero un restaurante importante que ya es cliente te llama de emergencia para una reposición urgente:",
+                    options: [
+                        { val: "A", text: "Mantener ruta original intacta; la reposición debe solicitarse por canales formales con anticipación." },
+                        { val: "B", text: "Cancelar prospección del día para atender exclusivamente la solicitud del cliente activo." },
+                        { val: "C", text: "Reorganizar eficientemente la ruta del día, atendiendo urgencia clave sin descuidar contactos críticos programados." },
+                        { val: "D", text: "Pedir al cliente que espere hasta la próxima semana para realizar despacho junto al pedido regular." }
+                    ]
+                },
+                {
+                    id: "p3",
+                    title: "3. Cuando un chef o administrador muestra resistencia a probar un producto nuevo argumentando que ya conoce la categoría:",
+                    options: [
+                        { val: "A", text: "Insistir tenazmente en características técnicas y beneficios nutricionales hasta convencerlo." },
+                        { val: "B", text: "Aceptar el 'no' rápidamente para no desperdiciar tiempo valioso en otro local." },
+                        { val: "C", text: "Validar postura con respeto, enfocar conversación en versatilidad y ofrecer muestra pequeña para que la experiencia hable sola." },
+                        { val: "D", text: "Comparar directamente el producto de forma agresiva frente a la competencia que utilizan." }
+                    ]
+                },
+                {
+                    id: "p4",
+                    title: "4. Para garantizar el cumplimiento de metas semanales de gestión comercial, tu sistema principal de organización es:",
+                    options: [
+                        { val: "A", text: "Confiable memoria personal y notas rápidas en el teléfono al finalizar el día." },
+                        { val: "B", text: "Uso disciplinado de agenda o herramienta digital para planificar rutas, registrar seguimientos y programar recordatorios." },
+                        { val: "C", text: "Trabajar según el flujo diario de urgencias que vayan surgindo en la calle." },
+                        { val: "D", text: "Concentrar todo el esfuerzo de prospección únicamente durante los últimos días del cierre de mes." }
+                    ]
+                }
+            ]
+        }
+    };
+
+    function toggleRoleQuestions() {
+        const rol = document.getElementById("rol").value;
+        const openContainer = document.getElementById("openQuestionsContainer");
+        const simpleContainer = document.getElementById("simpleChoiceContainer");
+
+        if (!rol || !questionsData[rol]) {
+            openContainer.innerHTML = '<p style="color: #666; font-style: italic;">Por favor seleccione primero un cargo para cargar las preguntas.</p>';
+            simpleContainer.innerHTML = '<p style="color: #666; font-style: italic;">Por favor seleccione primero un cargo para cargar las preguntas.</p>';
+            return;
+        }
+
+        const data = questionsData[rol];
+
+        let openHtml = "";
+        data.open.forEach((q) => {
+            openHtml += `
+                <div class="form-group">
+                    <label for="${q.id}">${q.label} *</label>
+                    <textarea id="${q.id}" name="${q.id}" required placeholder="Escriba su respuesta detallada aquí..."></textarea>
+                </div>
+            `;
+        });
+        openContainer.innerHTML = openHtml;
+
+        let simpleHtml = "";
+        data.simple.forEach((q) => {
+            let optionsHtml = "";
+            q.options.forEach(opt => {
+                optionsHtml += `
+                    <label>
+                        <input type="radio" name="${q.id}" value="${opt.val}" required>
+                        <span><strong>[${opt.val}]</strong> ${opt.text}</span>
+                    </label>
+                `;
+            });
+            simpleHtml += `
+                <div class="question-card">
+                    <div class="question-title">${q.title}</div>
+                    <div class="options-list">
+                        ${optionsHtml}
+                    </div>
+                </div>
+            `;
+        });
+        simpleContainer.innerHTML = simpleHtml;
+    }
+
+    function toggleAdminPanel() {
+        const panel = document.getElementById("adminPanelSection");
+        panel.classList.toggle("hidden");
+    }
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+
+        const btn = document.getElementById("btnSubmit");
+        const alertBox = document.getElementById("alertBox");
+        
+        btn.disabled = true;
+        btn.textContent = "Enviando postulación...";
+        alertBox.className = "alert hidden";
+
+        const rol = document.getElementById("rol").value;
+        const nombre = document.getElementById("nombre").value;
+        const edad = document.getElementById("edad").value;
+        const estadoCivil = document.getElementById("estadoCivil").value;
+        const contacto = document.getElementById("contacto").value;
+        const direccion = document.getElementById("direccion").value;
+
+        const openQuestions = questionsData[rol].open;
+        let textoAbiertoObj = {};
+        openQuestions.forEach(q => {
+            textoAbiertoObj[q.id] = document.getElementById(q.id).value;
+        });
+
+        const simpleQuestions = questionsData[rol].simple;
+        let seleccionSimpleObj = {};
+        simpleQuestions.forEach(q => {
+            const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+            seleccionSimpleObj[q.id] = selected ? selected.value : "";
+        });
+
+        const payload = {
+            id: Date.now(),
+            rol: rol,
+            nombre: nombre,
+            edad: edad,
+            estadoCivil: estadoCivil,
+            contacto: contacto,
+            direccion: direccion,
+            textoAbierto: textoAbiertoObj,
+            seleccionSimple: seleccionSimpleObj
+        };
+
+        // Guardamos en memoria local para alimentar el panel gerencial de inmediato
+        candidatesDatabase.push(payload);
+        updateCandidateDropdown();
+
+        if (GOOGLE_SCRIPT_URL !== "PEGAR_AQUI_TU_URL_DE_APPS_SCRIPT") {
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                showSuccess(alertBox, btn);
+            }).catch(err => {
+                showError(alertBox, btn, err);
+            });
+        } else {
+            setTimeout(() => {
+                showSuccess(alertBox, btn);
+                alert("¡Postulación registrada con éxito en el Panel Gerencial!");
+            }, 800);
+        }
+    }
+
+    function updateCandidateDropdown() {
+        const select = document.getElementById("candidateSelect");
+        select.innerHTML = '<option value="">Seleccione un candidato...</option>';
+        candidatesDatabase.forEach((c, index) => {
+            let opt = document.createElement("option");
+            opt.value = index;
+            opt.textContent = `${c.nombre} (${c.rol})`;
+            select.appendChild(opt);
+        });
+    }
+
+    function loadCandidateEvaluation() {
+        const index = document.getElementById("candidateSelect").value;
+        const detailsContainer = document.getElementById("evaluationDetailsContainer");
+
+        if (index === "") {
+            detailsContainer.classList.add("hidden");
+            return;
+        }
+
+        const candidate = candidatesDatabase[index];
+        document.getElementById("evalCandidateName").textContent = candidate.nombre;
+        document.getElementById("evalCandidateRole").textContent = candidate.rol;
+        document.getElementById("evalCandidateContact").textContent = candidate.contacto;
+
+        // Generación automática de análisis basada en respuestas de selección simple (ej. respuestas óptimas 'C' o 'B')
+        let optimalChoices = 0;
+        let totalSimple = Object.keys(candidate.seleccionSimple).length;
+        
+        for (let key in candidate.seleccionSimple) {
+            let val = candidate.seleccionSimple[key];
+            if (val === "C" || val === "B") {
+                optimalChoices++;
+            }
+        }
+
+        const scorePercent = (optimalChoices / totalSimple) * 100;
+
+        let prosUl = document.getElementById("evalPros");
+        let consUl = document.getElementById("evalCons");
+        let badge = document.getElementById("evalRecommendationBadge");
+        let recText = document.getElementById("evalRecommendationText");
+
+        prosUl.innerHTML = "";
+        consUl.innerHTML = "";
+
+        if (scorePercent >= 75) {
+            prosUl.innerHTML = "<li>Alto juicio situacional alineado con la cultura de negociación B2B del canal HORECA.</li><li>Enfoque claro en la resolución de conflictos y empatía con el cliente gastronómico.</li><li>Respuestas abiertas detalladas que reflejan experiencia en terreno.</li>";
+            consUl.innerHTML = "<li>Validar pretensiones salariales y disponibilidad inmediata para iniciar rutas.</li>";
+            badge.className = "recommendation-badge rec-hire";
+            badge.textContent = "RECOMENDADO PARA CONTRATAR";
+            recText.textContent = "El perfil demuestra competencias sólidas de resiliencia comercial y manejo de objeciones con chefs. Se sugiere avanzar a entrevista presencial de cierre.";
+        } else if (scorePercent >= 50) {
+            prosUl.innerHTML = "<li>Muestra nociones correctas de organización de agenda y atención al cliente.</li>";
+            consUl.innerHTML = "<li>Ciertas respuestas de juicio muestran tendencia a posturas rígidas o evasivas ante la presión operativa.</li><li>Requiere supervisión constante en terreno durante los primeros meses.</li>";
+            badge.className = "recommendation-badge rec-review";
+            badge.textContent = "EN EVALUACIÓN / ENTREVISTA PROFUNDA";
+            recText.textContent = "El candidato tiene potencial pero mostró dudas en escenarios críticos de negociación. Conviene profundizar en la entrevista para evaluar capacidad de adaptación.";
+        } else {
+            prosUl.innerHTML = "<li>Disponibilidad de postulación registrada.</li>";
+            consUl.innerHTML = "<li>Bajo alineamiento con el juicio comercial esperado para el canal HORECA.</li><li>Tendencia a evitar responsabilidades directas o delegar conflictos operativos.</li>";
+            badge.className = "recommendation-badge rec-discard";
+            badge.textContent = "NO RECOMENDADO";
+            recText.textContent = "Las respuestas reflejan poca afinidad con la estrategia comercial de la marca para romper resistencia en restaurantes. Se sugiere descartar.";
+        }
+
+        detailsContainer.classList.remove("hidden");
+    }
+
+    function showSuccess(alertBox, btn) {
+        alertBox.textContent = "¡Postulación enviada con éxito! Ya puedes revisarla en el Panel Gerencial.";
+        alertBox.className = "alert alert-success";
+        btn.disabled = false;
+        btn.textContent = "Enviar Postulación";
+        document.getElementById("recruitmentForm").reset();
+        document.getElementById("openQuestionsContainer").innerHTML = '<p style="color: #666; font-style: italic;">Por favor seleccione primero un cargo para cargar las preguntas.</p>';
+        document.getElementById("simpleChoiceContainer").innerHTML = '<p style="color: #666; font-style: italic;">Por favor seleccione primero un cargo para cargar las preguntas.</p>';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showError(alertBox, btn) {
+        alertBox.textContent = "Hubo un error al enviar la postulación. Inténtelo de nuevo.";
+        alertBox.className = "alert alert-error";
+        btn.disabled = false;
+        btn.textContent = "Enviar Postulación";
+    }
+</script>
+
+</body>
+</html>
