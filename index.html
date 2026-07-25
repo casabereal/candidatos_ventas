@@ -378,7 +378,7 @@
 </div>
 
 <script>
-    // ⚠️ PEGA AQUÍ TU URL DE LA APLICACIÓN WEB DE GOOGLE APPS SCRIPT:
+    // URL de la Aplicación Web de Google Apps Script:
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkcYxXSz1DcMCyX58VYqx5QhXDxNIzJhtW2chEnv68axTPa6lxQM4jAsCgz1ztgmoASQ/exec";
 
     const questionsData = {
@@ -633,9 +633,41 @@
         btn.textContent = "Enviar Postulación";
     }
 
-    function loadAdminCandidates() {
+    async function loadAdminCandidates() {
+        const container = document.getElementById("candidatesListContainer");
+        container.innerHTML = '<p style="font-size: 13px; color: #666; font-style: italic;">Cargando candidatos desde la nube...</p>';
+
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL);
+            const data = await response.json();
+            window.cloudCandidates = data;
+
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p style="font-size: 13px; color: #666; font-style: italic;">No hay candidatos registrados todavía.</p>';
+                return;
+            }
+
+            let html = "";
+            data.forEach((c) => {
+                html += `
+                    <div class="candidate-item" onclick="selectCloudCandidate('${c.id}')" id="item_${c.id}">
+                        <div style="font-weight: bold; color: var(--primary);">${c.nombre}</div>
+                        <div style="font-size: 12px; color: #666;">${c.rol}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+
+        } catch (error) {
+            console.error("Error al cargar de la nube, usando respaldo local:", error);
+            loadAdminCandidatesLocal();
+        }
+    }
+
+    function loadAdminCandidatesLocal() {
         let db = JSON.parse(localStorage.getItem("casabe_candidates") || "[]");
         const container = document.getElementById("candidatesListContainer");
+        window.cloudCandidates = db;
 
         if (db.length === 0) {
             container.innerHTML = '<p style="font-size: 13px; color: #666; font-style: italic;">No hay candidatos registrados todavía.</p>';
@@ -645,7 +677,7 @@
         let html = "";
         db.forEach((c) => {
             html += `
-                <div class="candidate-item" onclick="selectCandidate('${c.id}')" id="item_${c.id}">
+                <div class="candidate-item" onclick="selectCloudCandidate('${c.id}')" id="item_${c.id}">
                     <div style="font-weight: bold; color: var(--primary);">${c.nombre}</div>
                     <div style="font-size: 12px; color: #666;">${c.rol}</div>
                 </div>
@@ -654,9 +686,8 @@
         container.innerHTML = html;
     }
 
-    function selectCandidate(id) {
-        let db = JSON.parse(localStorage.getItem("casabe_candidates") || "[]");
-        let candidate = db.find(c => c.id === id);
+    function selectCloudCandidate(id) {
+        let candidate = window.cloudCandidates.find(c => c.id === id);
         if (!candidate) return;
 
         document.querySelectorAll(".candidate-item").forEach(el => el.classList.remove("active"));
@@ -671,10 +702,12 @@
         document.getElementById("evalContact").textContent = candidate.contacto;
         document.getElementById("evalLocation").textContent = candidate.direccion;
 
+        let selSimple = typeof candidate.seleccionSimple === 'string' ? JSON.parse(candidate.seleccionSimple) : candidate.seleccionSimple;
+
         let optimalCount = 0;
-        let total = Object.keys(candidate.seleccionSimple).length;
-        for (let k in candidate.seleccionSimple) {
-            let val = candidate.seleccionSimple[k];
+        let total = Object.keys(selSimple || {}).length;
+        for (let k in selSimple) {
+            let val = selSimple[k];
             if (val === "C" || val === "B") optimalCount++;
         }
         let score = total > 0 ? (optimalCount / total) * 100 : 0;
