@@ -378,6 +378,7 @@
 </div>
 
 <script>
+    // ⚠️ PEGA AQUÍ TU URL DE LA APLICACIÓN WEB DE GOOGLE APPS SCRIPT:
     const GOOGLE_SCRIPT_URL = "PEGAR_AQUI_TU_URL_DE_APPS_SCRIPT";
 
     const questionsData = {
@@ -590,6 +591,7 @@
             seleccionSimple: seleccionSimpleObj
         };
 
+        // Guardado local de respaldo
         let db = JSON.parse(localStorage.getItem("casabe_candidates") || "[]");
         db.push(payload);
         localStorage.setItem("casabe_candidates", JSON.stringify(db));
@@ -608,7 +610,7 @@
         } else {
             setTimeout(() => {
                 showSuccess(alertBox, btn);
-                alert("¡Postulación enviada con éxito! Ya está disponible en el Panel Gerencial.");
+                alert("¡Postulación guardada localmente! (Recuerda configurar el Apps Script de Google para recibirla en la nube).");
             }, 800);
         }
     }
