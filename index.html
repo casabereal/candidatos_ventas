@@ -378,8 +378,8 @@
 </div>
 
 <script>
-    // URL de la Aplicación Web de Google Apps Script:
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWifWl4PL-4pn33vhQZjaw_lzM-t3jiGKxrHbFz462kWDr2Q1uCgsEQIjq3BPlpiKTNA/exec";
+    // URL actualizada de la Aplicación Web de Google Apps Script (apuntando a la Hoja 1):
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZvBwjruttzPWLXLgDImgv-uc-aleoMrY6yEPd4NGs8ILJJUdBYSrMTDVqPjlL2Fq7MQ/exec";
 
     const questionsData = {
         "Jefa de Ventas": {
@@ -596,23 +596,16 @@
         db.push(payload);
         localStorage.setItem("casabe_candidates", JSON.stringify(db));
 
-        if (GOOGLE_SCRIPT_URL !== "PEGAR_AQUI_TU_URL_DE_APPS_SCRIPT") {
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            }).then(() => {
-                showSuccess(alertBox, btn);
-            }).catch(err => {
-                showError(alertBox, btn, err);
-            });
-        } else {
-            setTimeout(() => {
-                showSuccess(alertBox, btn);
-                alert("¡Postulación guardada localmente! (Recuerda configurar el Apps Script de Google para recibirla en la nube).");
-            }, 800);
-        }
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        }).then(() => {
+            showSuccess(alertBox, btn);
+        }).catch(err => {
+            showError(alertBox, btn, err);
+        });
     }
 
     function showSuccess(alertBox, btn) {
