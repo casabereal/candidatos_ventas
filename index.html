@@ -379,7 +379,7 @@
 
 <script>
     // URL Actualizada de la Aplicación Web de Google Apps Script:
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZh3ALdDZiaunVklKEFl3Q0UnL6v6bvk0k-lu2B8dsqNK3jax6E8uNmCFAJ96nqTRwOQ/exec";[cite: 2]
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-crnRTwmn12S3Gw0F5mttCYrTq70FIMELciO7AwlHm0Ti7ARXGhhu30fYfa95Wxiv_g/exec";
 
     const questionsData = {
         "Jefa de Ventas": {
@@ -580,6 +580,7 @@
         });
 
         const payload = {
+            origen: "Candidatos Ventas", // Identificador clave para el enrutamiento en el Apps Script
             id: 'cand_' + Date.now(),
             rol: rol,
             nombre: nombre,
